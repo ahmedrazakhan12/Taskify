@@ -4,9 +4,11 @@ import {
   CirclePlus,
   PencilOff,
   AlarmClockCheck,
+  LogOutIcon,
 } from "lucide-react";
 import React, { useState } from "react";
 import Modal from "../../modal/Modal";
+import { logout } from "../../../helpers/Index";
 
 const Sidebar = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -26,11 +28,16 @@ const Sidebar = () => {
       Icon: CirclePlus,
       size: 20,
       className: iconStyles.gray,
-      onClick: openModal, // Fix here: passing the function reference
+      onClick: openModal,
     },
     { Icon: PencilOff, size: 20, className: iconStyles.gray },
     { Icon: Smartphone, size: 20, className: iconStyles.gray },
-    { Icon: User, size: 20, className: iconStyles.gray, position: "bottom" },
+    {
+      Icon: LogOutIcon,
+      size: 20,
+      className: iconStyles.gray,
+      position: "bottom",
+    },
   ];
 
   const TopIcon = icons[0].Icon;
@@ -56,7 +63,10 @@ const Sidebar = () => {
               </div>
             ))}
         </div>
-        <div className="mt-auto absolute bottom-4">
+        <div
+          className="mt-auto absolute bottom-4 cursor-pointer"
+          onClick={logout}
+        >
           <div className={bottomIconClassName}>
             <BottomIcon size={bottomIconSize} />
           </div>

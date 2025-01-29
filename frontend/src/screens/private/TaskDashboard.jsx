@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { MoreHorizontal } from "lucide-react";
 import { InitialData } from "../../data";
+import { GetAuthData } from "../../helpers/Index";
+import Header from "../../components/ui/header/Header";
 
 const TaskDashboard = () => {
   const [columns, setColumns] = useState(InitialData);
@@ -38,11 +40,7 @@ const TaskDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#1a1c37] p-5">
-      <header className="mb-8">
-        <h1 className="text-xl font-semibold text-white">
-          SNK-2244 Contact manager improvements (28 tasks)
-        </h1>
-      </header>
+      <Header username={GetAuthData?.username} email={GetAuthData?.email} />
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {columns.map((column) => (
@@ -58,39 +56,43 @@ const TaskDashboard = () => {
                       {...provided.droppableProps}
                       className="flex flex-col gap-3"
                     >
-                      {column.tasks.map((task, index) => (
-                        <Draggable
-                          key={task.id}
-                          draggableId={task.id}
-                          index={index}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className="rounded-lg bg-purple-1 p-4"
-                            >
-                              <div className="flex items-start justify-between">
-                                <div className="space-y-3">
-                                  <div className="text-sm text-gray-400">
-                                    {task.id}
+                      {column.tasks && column.tasks.length > 0 ? (
+                        column.tasks.map((task, index) => (
+                          <Draggable
+                            key={task.id}
+                            draggableId={task.id}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className="rounded-lg bg-purple-1 p-4"
+                              >
+                                <div className="flex items-start justify-between">
+                                  <div className="space-y-3">
+                                    <div className="text-sm text-gray-400">
+                                      {task.id}
+                                    </div>
+                                    <h3 className="text-sm font-medium text-white">
+                                      {task.title}
+                                    </h3>
                                   </div>
-                                  <h3 className="text-sm font-medium text-white">
-                                    {task.title}
-                                  </h3>
+                                  {!dragging && (
+                                    <button className="text-white">
+                                      <MoreHorizontal className="h-4 w-4" />
+                                    </button>
+                                  )}
                                 </div>
-                                {/* Only show button if not dragging */}
-                                {!dragging && (
-                                  <button className="text-white">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                  </button>
-                                )}
                               </div>
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
+                            )}
+                          </Draggable>
+                        ))
+                      ) : (
+                        <p className="text-gray-400">No tasks</p>
+                      )}
+
                       {provided.placeholder}
                     </div>
                   )}

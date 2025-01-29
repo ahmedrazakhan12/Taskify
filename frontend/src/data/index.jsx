@@ -1,7 +1,11 @@
 import { ROUTES } from "../routes";
+import Login from "../screens/auth/Login";
+import Register from "../screens/auth/Register";
 import TaskDashboard from "../screens/private/TaskDashboard";
 
 export const publicRoutes = [
+  { path: ROUTES.LOGIN, element: <Login /> },
+  { path: ROUTES.REGISTER, element: <Register /> },
 ];
 
 export const privateRoutes = [{ path: ROUTES.TASK_DASHBOARD, element: <TaskDashboard /> }];
