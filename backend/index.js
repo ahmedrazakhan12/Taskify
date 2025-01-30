@@ -3,9 +3,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const { sequelize } = require("../Models/index.js");
-const authRoutes = require("../Routes/AuthRoutes/authRoute.js");
-const taskRoutes = require("../Routes/TaskRoutes/taskroute.js");
+const { sequelize } = require("./Models/index.js");
+const authRoutes = require("./Routes/AuthRoutes/authRoute.js");
+const taskRoutes = require("./Routes/TaskRoutes/taskroute.js");
 
 const app = express();
 
