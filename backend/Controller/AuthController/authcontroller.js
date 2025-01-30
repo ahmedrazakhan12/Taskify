@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../../Models/UserModel/usermodel.js");
+const { UserModel } = require("../../Models/index.js");
 const { validateRegistration } = require("../../Utils/Validate/validate.js");
 
 const register = async (req, res) => {
@@ -12,7 +12,7 @@ const register = async (req, res) => {
       return res.status(400).json({ message: error.details[0].message });
     }
 
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await UserModel.findOne({ where: { email } });
     if (existingUser) {
       return res
         .status(400)
@@ -21,10 +21,11 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    await User.create({ username, email, password: hashedPassword });
+    await UserModel.create({ username, email, password: hashedPassword });
 
     return res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
+    console.error("Error in register:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -33,7 +34,7 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
+    const user = await UserModel.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }

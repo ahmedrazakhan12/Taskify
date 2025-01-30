@@ -19,5 +19,27 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+
+const authMiddleware = (req, res, next) => {
+  const token = req.header("Authorization");
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Access denied. No token provided." });
+  }
+
+  try {
+    const decoded = jwt.verify(
+      token.replace("Bearer ", ""),
+      process.env.JWT_SECRET
+    );
+    req.user = { id: decoded.id }; // Attach user ID to the request object
+    next();
+  } catch (error) {
+    return res.status(403).json({ message: "Invalid or expired token" });
+  }
+};
+
 // Export the function using CommonJS
-module.exports = { authenticateToken };
+module.exports = { authenticateToken, authMiddleware };

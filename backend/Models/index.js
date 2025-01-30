@@ -11,4 +11,5 @@ db.Sequelize = Sequelize;
 db.UserModel = UserModel;
 db.TaskModel = TaskModel;
 
+
 module.exports = db;

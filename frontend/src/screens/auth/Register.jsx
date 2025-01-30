@@ -3,23 +3,30 @@ import { useForm } from "react-hook-form";
 import { AuthLayout } from "./components/AuthLayout";
 import NavigateBar from "../../components/ui/navigatebar/NavigateBar";
 import { ROUTES } from "../../routes";
-import ErrorMessage from "../../components/ui/ErrorMessage/ErrorMessage";
+import ErrorMessage from "../../components/ui/errormessage/ErrorMessage";
 import { postRequest } from "../../helpers/Functions";
 import InputField from "../../components/ui/input/Input";
 import { useNavigate } from "react-router-dom";
+import Button from "../../components/ui/button/Button";
+import toast from "react-hot-toast";
 const Register = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const response = await postRequest("auth/register", data);
+      setLoading(false);
+      toast.success("Registration successful");
       navigate(ROUTES.LOGIN);
     } catch (err) {
+      setLoading(false);
       console.error("Registration error:", err.response?.data || err.message);
       setError(err.response?.data?.message || "Registration failed");
     }
@@ -73,12 +80,12 @@ const Register = () => {
         {error && <ErrorMessage text={error} />}
 
         <div>
-          <button
+          <Button
+            label={"Register"}
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Register
-          </button>
+            className="justify-center rounded-lg bg-purple-2"
+            loading={loading}
+          />
         </div>
       </form>
 

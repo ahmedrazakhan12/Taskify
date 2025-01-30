@@ -10,8 +10,19 @@ const apiClient = axios.create({
   },
 });
 
+export const formatData = (data) => {
+  return data.map((column) => ({
+    ...column,
+    id: String(column.id),
+    tasks: column.tasks.map((task) => ({
+      ...task,
+      id: String(task.id),
+    })),
+  }));
+};
+
 export const getRequest = async (path, params = {}) => {
-  const token = getTokenFromLocalStorage();
+  const token = getTokenFromLocalStorage;
   try {
     const response = await apiClient.get(baseUrl + path, {
       params,
@@ -28,9 +39,10 @@ export const getRequest = async (path, params = {}) => {
 
 export const postRequest = async (path, data, isToken = true) => {
   const headers = isToken
-    ? { Authorization: `Bearer ${getTokenFromLocalStorage()}` }
+    ? { Authorization: `Bearer ${getTokenFromLocalStorage}` }
     : {};
 
+  console.log(`Bearer ${getTokenFromLocalStorage}`);
   try {
     const response = await apiClient.post(baseUrl + path, data, { headers });
     console.log("response", response);

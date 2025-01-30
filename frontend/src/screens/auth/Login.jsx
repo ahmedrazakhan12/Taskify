@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AuthLayout } from "./components/AuthLayout";
-import ErrorMessage from "../../components/ui/ErrorMessage/ErrorMessage";
+import ErrorMessage from "../../components/ui/errormessage/ErrorMessage";
 import { postRequest } from "../../helpers/Functions";
-import { useNavigate } from "react-router-dom";
 import { ROUTES } from "../../routes";
 import NavigateBar from "../../components/ui/navigatebar/NavigateBar";
-import { localStorageKeys, saveItemToLocalStorage } from "../../helpers/Index";
+import {
+  localStorageKeys,
+  saveItemToLocalStorage,
+  saveJsonItemToLocalStorage,
+} from "../../helpers/Index";
+import toast from "react-hot-toast";
+import Button from "../../components/ui/button/Button";
+import InputField from "../../components/ui/input/Input";
 const Login = () => {
   const {
     register,
@@ -14,15 +20,19 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       const response = await postRequest("auth/login", data, false);
-      console.log("Login successful", response.data);
       saveItemToLocalStorage(localStorageKeys.authToken, response.data.token);
-      saveItemToLocalStorage(localStorageKeys.authUser, response.data.user);
-      navigate(ROUTES.TASK_DASHBOARD);
+      saveJsonItemToLocalStorage(localStorageKeys.authUser, response.data.user);
+      setLoading(false);
+      toast.success("Login successful !");
+      window.location.href = ROUTES.TASK_DASHBOARD;
     } catch (err) {
+      setLoading(false);
       setError(err.response?.data?.message || "Login failed");
     }
   };
@@ -31,63 +41,52 @@ const Login = () => {
     <AuthLayout title="Sign in to your account">
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-300"
-          >
-            Email address
-          </label>
           <div className="mt-1">
-            <input
+            <InputField
+              label="Email address"
               id="email"
               type="email"
               autoComplete="email"
-              required
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              {...register("email", {
+              register={register}
+              validation={{
                 required: "Email is required",
                 pattern: {
                   value: /^\S+@\S+$/i,
                   message: "Invalid email address",
                 },
-              })}
+              }}
             />
             {errors.email && <ErrorMessage text={errors.email.message} />}
           </div>
         </div>
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-300"
-          >
-            Password
-          </label>
           <div className="mt-1">
-            <input
+            <InputField
+              label="Password"
               id="password"
               type="password"
-              autoComplete="current-password"
-              required
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              {...register("password", {
+              autoComplete="new-password"
+              register={register}
+              validation={{
                 required: "Password is required",
                 minLength: {
                   value: 6,
                   message: "Password must be at least 6 characters",
                 },
-              })}
+              }}
             />
+
             {errors.password && <ErrorMessage text={errors.password.message} />}
           </div>
         </div>
         {error && <ErrorMessage text={error} />}
         <div>
-          <button
+          <Button
+            label={"Sign In"}
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Sign in
-          </button>
+            className="justify-center rounded-lg bg-purple-2"
+            loading={loading}
+          />
         </div>
         <NavigateBar
           text="Don't have an account?"

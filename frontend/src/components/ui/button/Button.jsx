@@ -27,7 +27,7 @@ const Button = ({
   return (
     <button
       id={id}
-      onClick={handleClick} 
+      onClick={handleClick}
       disabled={disabled}
       type={type}
       className={`relative bg-purple-1 flex  items-center w-full p-3 overflow-hidden
@@ -37,7 +37,7 @@ const Button = ({
         ${className} transition duration-500 ease-in-out`}
     >
       <span
-        className={`absolute inset-0 bg-black-1 opacity-15 transition-all duration-300 transform ${
+        className={`absolute inset-0 bg-purple-2 opacity-15 transition-all duration-300 transform ${
           clicked ? "scale-100" : "scale-0"
         } origin-center`}
       />

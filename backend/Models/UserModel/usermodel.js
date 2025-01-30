@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../Config/Database/database"); // Ensure correct path
 
-const User = sequelize.define(
+const UserModel = sequelize.define(
   "User",
   {
     id: {
@@ -29,4 +29,4 @@ const User = sequelize.define(
   }
 );
 
-module.exports = User;
+module.exports = { UserModel };

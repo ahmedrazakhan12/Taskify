@@ -1,6 +1,5 @@
 import {
   Smartphone,
-  User,
   CirclePlus,
   PencilOff,
   AlarmClockCheck,
@@ -9,10 +8,9 @@ import {
 import React, { useState } from "react";
 import Modal from "../../modal/Modal";
 import { logout } from "../../../helpers/Index";
+import { AddTasks } from "../../../screens/private/components/Tasks";
 
-const Sidebar = () => {
-  const [isModalOpen, setModalOpen] = useState(false);
-
+const Sidebar = ({ isModalOpen, setModalOpen, setRequestSent }) => {
   const iconStyles = {
     default: "cursor-pointer transition-colors hover:text-gray-200",
     blue: "text-blue-500 hover:text-blue-400",
@@ -72,21 +70,12 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
+        className={`min-h-[60vh] max-w-xl `}
         content={
-          <>
-            <p className="font-Monsterrat font-bold text-center mb-2 text-gray-800 text-[17px]">
-              Are you sure you want to logout?
-            </p>
-            <p className="font-Monsterrat font-bold text-center mb-5 text-[12px]">
-              If you choose to log out, please be aware that you will be
-              required to log in again in order to access your account and
-              continue using the application.
-            </p>
-          </>
+          <AddTasks setRequestSent={setRequestSent} closeModal={closeModal} />
         }
       />
     </nav>
