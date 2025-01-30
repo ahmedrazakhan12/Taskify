@@ -1,8 +1,7 @@
-require("dotenv").config(); // Ensure environment variables are loaded
+require("dotenv").config();
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../Config/Database/database.js");
 
-// Load enum values from environment variables
 const taskStatuses = process.env.TASK_STATUSES.split(",");
 
 const TaskModel = sequelize.define(
@@ -22,7 +21,7 @@ const TaskModel = sequelize.define(
     },
     status: {
       type: DataTypes.ENUM(...taskStatuses),
-      defaultValue: taskStatuses[0], // Use the first value as the default
+      defaultValue: taskStatuses[0],
     },
     userId: {
       type: DataTypes.INTEGER,

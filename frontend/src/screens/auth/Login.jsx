@@ -48,6 +48,7 @@ const Login = () => {
               type="email"
               autoComplete="email"
               register={register}
+              errors={errors}
               validation={{
                 required: "Email is required",
                 pattern: {
@@ -56,7 +57,6 @@ const Login = () => {
                 },
               }}
             />
-            {errors.email && <ErrorMessage text={errors.email.message} />}
           </div>
         </div>
         <div>
@@ -67,6 +67,7 @@ const Login = () => {
               type="password"
               autoComplete="new-password"
               register={register}
+              errors={errors}
               validation={{
                 required: "Password is required",
                 minLength: {
@@ -75,8 +76,6 @@ const Login = () => {
                 },
               }}
             />
-
-            {errors.password && <ErrorMessage text={errors.password.message} />}
           </div>
         </div>
         {error && <ErrorMessage text={error} />}
@@ -97,5 +96,4 @@ const Login = () => {
     </AuthLayout>
   );
 };
-
 export default Login;

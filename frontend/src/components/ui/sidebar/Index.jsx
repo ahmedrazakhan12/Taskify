@@ -1,85 +1,86 @@
-import {
-  Smartphone,
-  CirclePlus,
-  PencilOff,
-  AlarmClockCheck,
-  LogOutIcon,
-} from "lucide-react";
-import React, { useState } from "react";
-import Modal from "../../modal/Modal";
+import { AlarmClockCheck, CirclePlus, LogOutIcon } from "lucide-react";
+import React from "react";
 import { logout } from "../../../helpers/Index";
 import { AddTasks } from "../../../screens/private/components/Tasks";
+import Button from "../button/Button";
 
-const Sidebar = ({ isModalOpen, setModalOpen, setRequestSent }) => {
-  const iconStyles = {
-    default: "cursor-pointer transition-colors hover:text-gray-200",
-    blue: "text-blue-500 hover:text-blue-400",
-    gray: "text-gray-400 hover:text-gray-200",
-  };
+export const Logout = ({ closeModal }) => {
+  return (
+    <>
+      <p className="font-Monsterrat font-bold text-center mb-2 text-gray-800 text-[17px]">
+        Are you sure you want to logout?
+      </p>
+      <p className="font-Monsterrat font-bold text-center mb-5 text-[12px] ">
+        If you choose to log out, you will need to log in again to access your
+        account.
+      </p>
+      <div className="flex justify-end gap-4 mt-4">
+        <Button
+          label="Cancel"
+          type="button"
+          onClick={closeModal}
+          className="rounded-md text-center w-24 justify-center"
+        />
+        <Button
+          label="Logout"
+          type="button"
+          onClick={logout}
+          className="rounded-md text-center w-24 justify-center bg-red-600 text-white"
+        />
+      </div>
+    </>
+  );
+};
 
-  const openModal = () => setModalOpen(true);
-  const closeModal = () => setModalOpen(false);
+const Sidebar = ({ setModal, setRequestSent, requestSent }) => {
+  const openModal = () =>
+    setModal({
+      open: true,
+      component: (
+        <AddTasks
+          setModal={setModal}
+          setRequestSent={setRequestSent}
+          requestSent={requestSent}
+        />
+      ),
+    });
+
+  const openLogoutModal = () =>
+    setModal({
+      open: true,
+      component: <Logout closeModal={() => setModal({ open: false })} />,
+    });
 
   const icons = [
-    { Icon: AlarmClockCheck, size: 24, className: iconStyles.blue },
+    {
+      Icon: AlarmClockCheck,
+      size: 24,
+      className: "text-blue-500 hover:text-blue-400 cursor-pointer",
+    },
     {
       Icon: CirclePlus,
       size: 20,
-      className: iconStyles.gray,
+      className: "text-gray-400 hover:text-gray-200 cursor-pointer",
       onClick: openModal,
     },
-    { Icon: PencilOff, size: 20, className: iconStyles.gray },
-    { Icon: Smartphone, size: 20, className: iconStyles.gray },
-    {
-      Icon: LogOutIcon,
-      size: 20,
-      className: iconStyles.gray,
-      position: "bottom",
-    },
   ];
-
-  const TopIcon = icons[0].Icon;
-  const topIconSize = icons[0].size;
-  const topIconClassName = icons[0].className;
-  const BottomIcon = icons[4].Icon;
-  const bottomIconSize = icons[4].size;
-  const bottomIconClassName = icons[4].className;
 
   return (
     <nav className="fixed left-0 top-0 h-screen w-16 flex flex-col items-center bg-[#1a1a1a] py-4">
       <div className="flex flex-col items-center gap-8">
-        <div className={topIconClassName}>
-          <TopIcon size={topIconSize} />
-        </div>
-
-        <div className="flex flex-col items-center gap-6 cursor-pointer">
-          {icons
-            .slice(1, 4)
-            .map(({ Icon, size, className, onClick }, index) => (
-              <div key={index} className={className} onClick={onClick}>
-                <Icon size={size} />
-              </div>
-            ))}
-        </div>
-        <div
-          className="mt-auto absolute bottom-4 cursor-pointer"
-          onClick={logout}
-        >
-          <div className={bottomIconClassName}>
-            <BottomIcon size={bottomIconSize} />
+        {icons.map(({ Icon, size, className, onClick }, index) => (
+          <div key={index} className={className} onClick={onClick}>
+            <Icon size={size} />
           </div>
+        ))}
+        <div
+          className="mt-auto absolute bottom-4 cursor-pointer text-gray-400 hover:text-gray-200"
+          onClick={openLogoutModal}
+        >
+          <LogOutIcon size={20} />
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        className={`min-h-[60vh] max-w-xl `}
-        content={
-          <AddTasks setRequestSent={setRequestSent} closeModal={closeModal} />
-        }
-      />
     </nav>
   );
 };
-
 export default Sidebar;

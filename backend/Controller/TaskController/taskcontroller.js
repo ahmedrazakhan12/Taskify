@@ -96,7 +96,7 @@ const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
     const task = await TaskModel.findOne({
-      where: { id, UserId: req.user.id },
+      where: { id, userId: req.user.id },
     });
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
@@ -128,14 +128,12 @@ const updateStatus = async (req, res) => {
         .json({ message: "Unauthorized. User ID missing." });
     }
 
-    // Update task status where ID matches
     const task = await TaskModel.findOne({ where: { id: taskId } });
 
     if (!task) {
       return res.status(404).json({ message: "Task not found." });
     }
 
-    // Update task status
     task.status = status;
     await task.save();
 

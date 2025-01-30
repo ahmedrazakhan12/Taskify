@@ -36,7 +36,7 @@ const TextArea = ({
           placeholder={placeholder}
           maxLength={500}
           onChange={onChange}
-          className={`w-[70%] sm:w-auto lg:w-[90%] ml-8 pr-10 rounded-md font-[600] placeholder:text-[12px] focus:outline-none font-Montserrat text-[11px] ${className}`}
+          className={`w-[90%] ml-8 pr-10 rounded-md font-[600] placeholder:text-[12px] focus:outline-none font-Montserrat text-[11px] ${className}`}
         />
 
         {suffixIcon && (

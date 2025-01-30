@@ -35,7 +35,7 @@ const Input = ({
           name={name}
           placeholder={placeholder}
           onChange={onChange}
-          className="w-[93%]py-2 ml-8 pr-10 rounded-md font-[600] placeholder:text-[12px] focus:outline-none font-Montserrat  text-gray-900  text-sm "
+          className="w-[90%] py-2 ml-8 pr-10 rounded-md font-[600] placeholder:text-[12px] focus:outline-none font-Montserrat  text-gray-900  text-sm "
         />
 
         {suffixIcon && (

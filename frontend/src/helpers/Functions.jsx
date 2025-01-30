@@ -32,7 +32,6 @@ export const getRequest = async (path, params = {}) => {
     });
     return response.data;
   } catch (error) {
-    console.error("GET Request Error:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -53,10 +52,28 @@ export const postRequest = async (path, data, isToken = true) => {
   }
 };
 
-export const formatDate = (date) => {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+export const putRequest = async (path, data) => {
+  const headers = {
+    Authorization: `Bearer ${getTokenFromLocalStorage}`,
+  };
+
+  try {
+    const response = await apiClient.put(baseUrl + path, data, { headers });
+    return response;
+  } catch (error) {
+    console.error("POST Request Error:", error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const deleteRequest = async (path) => {
+  const headers = {
+    Authorization: `Bearer ${getTokenFromLocalStorage}`,
+  };
+  try {
+    const response = await apiClient.delete(baseUrl + path, { headers });
+    return response;
+  } catch (error) {
+    throw error;
+  }
 };

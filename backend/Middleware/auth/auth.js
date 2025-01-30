@@ -34,7 +34,7 @@ const authMiddleware = (req, res, next) => {
       token.replace("Bearer ", ""),
       process.env.JWT_SECRET
     );
-    req.user = { id: decoded.id }; // Attach user ID to the request object
+    req.user = { id: decoded.id };
     next();
   } catch (error) {
     return res.status(403).json({ message: "Invalid or expired token" });

@@ -5,9 +5,19 @@ import AuthProtect from "../../screens/auth/protected/AuthProtect";
 import PrivateProtectedRoute from "../../screens/auth/protected/PrivateProtectedRoute";
 import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
+import Modal from "../modal/Modal";
 const AppContent = () => {
   const location = useLocation();
-  const [isModalOpen, setModalOpen] = useState(false);
+  const [isModal, setModal] = useState({
+    open: false,
+    component: null,
+  });
+
+  const closeModal = () =>
+    setModal({
+      open: false,
+      component: null,
+    });
   const [requestSent, setRequestSent] = useState(false);
 
   const isPrivateRoute = privateRoutes.some(
@@ -18,8 +28,9 @@ const AppContent = () => {
       {isPrivateRoute && (
         <Sidebar
           setRequestSent={setRequestSent}
-          isModalOpen={isModalOpen}
-          setModalOpen={setModalOpen}
+          isModal={isModal}
+          setModal={setModal}
+          requestSent={requestSent}
         />
       )}
       <Toaster />
@@ -39,13 +50,29 @@ const AppContent = () => {
               path={path}
               element={
                 <PrivateProtectedRoute>
-                  {React.cloneElement(element, { isModalOpen, requestSent })}
+                  {React.cloneElement(element, {
+                    isModal,
+                    setModal,
+                    setRequestSent,
+                    requestSent,
+                  })}
                 </PrivateProtectedRoute>
               }
             />
           ))}
         </Routes>
       </div>
+
+      <Modal
+        isOpen={isModal.open}
+        onClose={isModal.open}
+        className={` max-w-xl `}
+        content={
+          isModal.component
+            ? React.cloneElement(isModal.component, { closeModal })
+            : null
+        }
+      />
     </div>
   );
 };

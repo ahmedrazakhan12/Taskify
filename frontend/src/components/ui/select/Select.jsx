@@ -12,6 +12,7 @@ const Select = ({
   selectedValue,
   error,
 }) => {
+  console.log("selectedValue", selectedValue);
   return (
     <>
       <div
