@@ -3,9 +3,9 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
-const { sequelize } = require("../Models/index.js");
-const authRoutes = require("../Routes/AuthRoutes/authRoute.js");
-const taskRoutes = require("../Routes/TaskRoutes/taskroute.js");
+const { sequelize } = require("./Models/index.js");
+const authRoutes = require("./Routes/AuthRoutes/authRoute.js");
+const taskRoutes = require("./Routes/TaskRoutes/taskroute.js");
 
 const app = express();
 
@@ -39,18 +39,19 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke!");
 });
 
-module.exports = (req, res) => {
-  sequelize
-    .authenticate()
-    .then(() => {
-      console.log("Database connection has been established successfully.");
-      sequelize.sync().then(() => {
-        console.log("Database synced successfully.");
-        app(req, res); // Pass the request and response to the express app
+// Start the server after database authentication and syncing
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log("Database connection has been established successfully.");
+    sequelize.sync().then(() => {
+      console.log("Database synced successfully.");
+      const PORT = process.env.PORT || 5000;
+      app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
       });
-    })
-    .catch((error) => {
-      console.error("Unable to start the server:", error);
-      res.status(500).send("Database connection failed!");
     });
-};
+  })
+  .catch((error) => {
+    console.error("Unable to start the server:", error);
+  });

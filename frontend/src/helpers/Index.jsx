@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { ROUTES } from "../routes";
 import toast from "react-hot-toast";
 
-export const baseUrl = "http://localhost:3000/api/";
+export const baseUrl = "http://localhost:5000/api/";
 
 export const localStorageKeys = {
   authToken: "authToken",
