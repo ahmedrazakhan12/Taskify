@@ -32,7 +32,7 @@ const SplashScreen = () => {
         transition={{ delay: 0.2, duration: 0.5 }}
         className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 font-sans"
       >
-        TaskSphere.com
+        Taskify.com
       </motion.h1>
       <motion.p
         initial={{ y: 20, opacity: 0 }}
